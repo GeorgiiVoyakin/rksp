@@ -2,3 +2,4 @@
 .gradle/
 build/
 copy*.txt
+text.txt
