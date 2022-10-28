@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.List;
 
 public class Task2 {
@@ -19,6 +17,7 @@ public class Task2 {
         // 1
         File file = new File("./100MB.txt");
         File copy = new File("./copy.txt");
+        long start = System.currentTimeMillis();
         try (FileInputStream in = new FileInputStream(file);
              FileOutputStream out = new FileOutputStream(copy)
         ) {
@@ -26,10 +25,14 @@ public class Task2 {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+        System.out.printf("FileInputStream/FileOutputStream: %d ms\n", timeElapsed);
 
         // 2
         String copy1PathString = "./copy1.txt";
         Path copy1Path = Path.of(copy1PathString);
+        start = System.currentTimeMillis();
         try (
             var in = FileChannel.open(Path.of(file.getPath()));
             var out = FileChannel.open(copy1Path, StandardOpenOption.CREATE, StandardOpenOption.WRITE)
@@ -41,13 +44,24 @@ public class Task2 {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.printf("FileChannel: %d ms\n", timeElapsed);
 
         // 3
         File copy2 = new File("./copy2.txt");
+        start = System.currentTimeMillis();
         List<String> lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
         FileUtils.writeLines(copy2, lines);
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.printf("Apache Commons IO: %d ms\n", timeElapsed);
 
         // 4
-        Files.copy(file.toPath(), Path.of("./copy3.txt"));
+        start = System.currentTimeMillis();
+        Files.copy(file.toPath(), Path.of("./copy3.txt"), StandardCopyOption.REPLACE_EXISTING);
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.printf("Files class: %d ms\n", timeElapsed);
     }
 }
