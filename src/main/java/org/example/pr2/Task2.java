@@ -14,6 +14,7 @@ import java.util.List;
 
 public class Task2 {
     public static void main(String[] args) throws IOException {
+        Runtime runtime = Runtime.getRuntime();
         // 1
         File file = new File("./100MB.txt");
         File copy = new File("./copy.txt");
@@ -27,7 +28,7 @@ public class Task2 {
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
-        System.out.printf("FileInputStream/FileOutputStream: %d ms\n", timeElapsed);
+        System.out.printf("FileInputStream/FileOutputStream: %d ms %d mb\n", timeElapsed, (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024));
 
         // 2
         String copy1PathString = "./copy1.txt";
@@ -46,7 +47,7 @@ public class Task2 {
         }
         finish = System.currentTimeMillis();
         timeElapsed = finish - start;
-        System.out.printf("FileChannel: %d ms\n", timeElapsed);
+        System.out.printf("FileChannel: %d ms %d mb\n", timeElapsed, (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024));
 
         // 3
         File copy2 = new File("./copy2.txt");
@@ -55,13 +56,13 @@ public class Task2 {
         FileUtils.writeLines(copy2, lines);
         finish = System.currentTimeMillis();
         timeElapsed = finish - start;
-        System.out.printf("Apache Commons IO: %d ms\n", timeElapsed);
+        System.out.printf("Apache Commons IO: %d ms %d mb\n", timeElapsed, (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024));
 
         // 4
         start = System.currentTimeMillis();
         Files.copy(file.toPath(), Path.of("./copy3.txt"), StandardCopyOption.REPLACE_EXISTING);
         finish = System.currentTimeMillis();
         timeElapsed = finish - start;
-        System.out.printf("Files class: %d ms\n", timeElapsed);
+        System.out.printf("Files class: %d ms %d mb\n", timeElapsed, (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024));
     }
 }
