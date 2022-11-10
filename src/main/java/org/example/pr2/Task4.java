@@ -8,7 +8,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
 public class Task4 {
     public static void main(String[] args) throws IOException, InterruptedException {
         WatchService watchService = FileSystems.getDefault().newWatchService();
-        Path path = Paths.get("C:\\Users\\cineo\\Documents\\TEST");
+        Path path = Paths.get(".\\TEST");
         //будем следить за созданием, изменение и удалением файлов.
         path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
         boolean poll = true;
